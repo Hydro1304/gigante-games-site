@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gigante dos Games | Loja Virtual Oficial</title>
+    <style>
+        /* Reset e Cores Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; }
+        body { background-color: #0d0e15; color: #ffffff; line-height: 1.6; padding-bottom: 80px; }
+        
+        /* Seção Topo (Hero) */
+        .hero { background: linear-gradient(135deg, #161824 0%, #0d0e15 100%); padding: 60px 20px; text-align: center; border-bottom: 3px solid #e94560; }
+        .hero h1 { font-size: 2.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
+        .hero h1 span { color: #e94560; }
+        .hero p { font-size: 1.15rem; color: #94a3b8; max-width: 650px; margin: 0 auto 30px auto; }
+        .cta-button { display: inline-block; background-color: #25D366; color: white; padding: 15px 35px; font-size: 1.1rem; font-weight: bold; text-decoration: none; border-radius: 50px; transition: 0.2s; }
+        .cta-button:hover { background-color: #1ebe57; transform: scale(1.05); }
+
+        /* Formulário Assistência (Mantido) */
+        .form-container { background: #111827; padding: 30px; border-radius: 8px; max-width: 600px; margin: 40px auto; border: 1px solid #1f2335; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .form-container h2 { text-align: center; margin-bottom: 20px; color: #00adb5; font-size: 1.5rem; text-transform: uppercase; }
+        input, select, textarea { width: 100%; padding: 14px; margin-bottom: 15px; border-radius: 4px; border: 1px solid #1f2335; background: #161824; color: #fff; font-size: 1rem; }
+        .btn-submit { width: 100%; padding: 16px; background: #00adb5; color: #fff; font-weight: bold; border: none; border-radius: 50px; cursor: pointer; font-size: 1.1rem; transition: 0.2s; text-transform: uppercase; }
+        .btn-submit:hover { background: #008c93; transform: scale(1.02); }
+
+        /* Catálogo de Produtos */
+        .catalog { max-width: 1100px; margin: 50px auto; padding: 0 20px; text-align: center; }
+        .catalog h2 { color: #e94560; font-size: 2rem; margin-bottom: 30px; text-transform: uppercase; }
+        .grid-products { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+        .product-card { background: #161824; border: 1px solid #1f2335; border-radius: 10px; padding: 20px; width: 280px; text-align: center; transition: 0.3s; }
+        .product-card:hover { transform: translateY(-5px); border-color: #e94560; }
+        .product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 15px; border: 1px solid #1f2335; }
+        .product-card h3 { color: #fff; margin-bottom: 10px; font-size: 1.2rem; }
+        .price { color: #e94560; font-size: 1.4rem; font-weight: bold; margin-bottom: 15px; display: block; }
+        .btn-add { background: #25D366; color: #fff; border: none; padding: 12px; border-radius: 50px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.2s; font-size: 1rem; }
+        .btn-add:hover { background: #1ebe57; }
+
+        /* Barra do Carrinho */
+        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: #111827; border-top: 2px solid #25D366; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 100; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        .cart-info { font-size: 1.1rem; font-weight: bold; }
+        .cart-info span { color: #25D366; }
+        .btn-checkout { background: #25D366; color: #fff; border: none; padding: 12px 25px; border-radius: 50px; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.2s;}
+        
+        /* Modal de Checkout (E-commerce Real) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; justify-content: center; align-items: center; overflow-y: auto; padding: 20px; }
+        .checkout-box { background: #111827; border: 2px solid #e94560; border-radius: 10px; width: 100%; max-width: 600px; padding: 30px; margin: auto; }
+        .checkout-box h2 { color: #e94560; border-bottom: 1px solid #1f2335; padding-bottom: 10px; margin-bottom: 20px; text-align: center; }
+        .checkout-section { background: #161824; padding: 15px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #1f2335; }
+        .checkout-section h3 { color: #00adb5; margin-bottom: 15px; font-size: 1.1rem; }
+        .flex-row { display: flex; gap: 10px; }
+        .flex-row input { flex: 1; }
+        .resumo-valor { font-size: 1.2rem; text-align: right; font-weight: bold; color: #25D366; margin-top: 10px; }
+        .btn-close { background: #e94560; color: white; padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; float: right; }
+        .btn-close:hover { background: #c83248; }
+        
+        #dados-cartao { display: none; margin-top: 15px; border-top: 1px dashed #374151; padding-top: 15px; }
+
+    </style>
+</head>
+<body>
+
+    <header class="hero">
+        <h1>Gigante dos <span>Games</span></h1>
+        <p>Compre os melhores consoles, jogos de lançamento e solicite assistência técnica especializada. Entrega rápida para toda região.</p>
+        <a href="https://wa.me/5511947899548" target="_blank" class="cta-button">Falar com a Loja no WhatsApp</a>
+    </header>
+
+    <div class="form-container">
+        <h2>Orçamento de Assistência</h2>
+        <form onsubmit="enviarOrcamentoWhatsApp(event)">
+            <input type="text" id="nomeAssist" placeholder="Seu Nome Completo" required>
+            <select id="servicoAssist" required>
+                <option value="" disabled selected>Qual o problema ou serviço?</option>
+                <option value="Conserto de Controle / Drift">Conserto de Controle</option>
+                <option value="Limpeza Console">Limpeza e Pasta Térmica</option>
+            </select>
+            <textarea id="detalhesAssist" rows="3" placeholder="Detalhes (Modelo, defeito...)" required></textarea>
+            <button type="submit" class="btn-submit">Pedir Orçamento no WhatsApp</button>
+        </form>
+    </div>
+
+    <section class="catalog">
+        <h2>Catálogo de Produtos</h2>
+        <div class="grid-products">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1606813907291-d86efa9b94db?q=80&w=600&auto=format&fit=crop" alt="PS5">
+                <h3>PlayStation 5 Slim (1TB)</h3>
+                <span class="price">R$ 3.699,00</span>
+                <button class="btn-add" onclick="adicionarItem('PlayStation 5 Slim (1TB)', 3699.00)">Adicionar ao Carrinho</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1605901309584-818e25960b8f?q=80&w=600&auto=format&fit=crop" alt="Xbox">
+                <h3>Xbox Series X (1TB)</h3>
+                <span class="price">R$ 3.899,00</span>
+                <button class="btn-add" onclick="adicionarItem('Xbox Series X (1TB)', 3899.00)">Adicionar ao Carrinho</button>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1606318801954-d46d46d3360a?q=80&w=600&auto=format&fit=crop" alt="Controle">
+                <h3>Controle DualSense PS5</h3>
+                <span class="price">R$ 450,00</span>
+                <button class="btn-add" onclick="adicionarItem('Controle DualSense PS5', 450.00)">Adicionar ao Carrinho</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="cart-bar" id="cart-bar" style="display: none;">
+        <div class="cart-info">Itens: <span id="qtd-itens">0</span> | Subtotal: <span id="valor-subtotal">R$ 0,00</span></div>
+        <button class="btn-checkout" onclick="abrirCheckout()">Ir para o Pagamento</button>
+    </div>
+
+    <div class="modal-overlay" id="checkout-modal">
+        <div class="checkout-box">
+            <button class="btn-close" onclick="fecharCheckout()">Voltar</button>
+            <h2>Finalizar Compra</h2>
+            
+            <form id="formCheckout" action="https://formsubmit.co/enzzosouzag27@gmail.com" method="POST">
+                
+                <input type="hidden" name="_subject" value="NOVO PEDIDO NO SITE - GIGANTE DOS GAMES!">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="Resumo_dos_Itens" id="mail_itens">
+                <input type="hidden" name="Total_Final" id="mail_total">
+
+                <div class="checkout-section">
+                    <h3>1. Seus Dados e Entrega</h3>
+                    <input type="text" name="Nome_Cliente" placeholder="Nome Completo" required>
+                    <input type="email" name="Email_Cliente" placeholder="E-mail" required>
+                    <input type="text" name="Telefone" placeholder="WhatsApp (DDD + Número)" required>
+                    
+                    <div class="flex-row">
+                        <input type="text" name="CEP" id="cep" placeholder="CEP" onblur="calcularFrete()" required>
+                        <input type="text" name="Numero_Endereco" placeholder="Número" required>
+                    </div>
+                    <input type="text" name="Endereco_Completo" placeholder="Rua, Bairro, Cidade" required>
+                </div>
+
+                <div class="checkout-section">
+                    <h3>2. Forma de Pagamento</h3>
+                    <select name="Metodo_Pagamento" id="metodoPagamento" onchange="verificarPagamento()" required>
+                        <option value="" disabled selected>Escolha como quer pagar</option>
+                        <option value="PIX">PIX (5% de Desconto)</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito</option>
+                        <option value="Boleto">Boleto Bancário</option>
+                    </select>
+
+                    <div id="dados-cartao">
+                        <input type="text" placeholder="Número do Cartão (Simulação)" maxlength="16">
+                        <div class="flex-row">
+                            <input type="text" placeholder="Validade (MM/AA)">
+                            <input type="text" placeholder="CVV" maxlength="3">
+                        </div>
+                        <select name="Parcelamento" id="parcelas">
+                            <option value="1x">1x sem juros</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="checkout-section">
+                    <h3>3. Resumo</h3>
+                    <p style="color:#94a3b8">Subtotal: <span id="resumo-sub">R$ 0,00</span></p>
+                    <p style="color:#94a3b8">Frete: <span id="resumo-frete">A calcular...</span></p>
+                    <div class="resumo-valor">Total: <span id="resumo-total">R$ 0,00</span></div>
+                </div>
+
+                <button type="submit" class="btn-submit" onclick="prepararEnvio()">Confirmar Pedido e Pagar</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Lógica do WhatsApp (Assistência)
+        function enviarOrcamentoWhatsApp(e) {
+            e.preventDefault();
+            const n = document.getElementById('nomeAssist').value;
+            const s = document.getElementById('servicoAssist').value;
+            const d = document.getElementById('detalhesAssist').value;
+            window.open(`https://wa.me/5511947899548?text=${encodeURIComponent(`*ORÇAMENTO*\nNome: ${n}\nServiço: ${s}\nDetalhes: ${d}`)}`);
+        }
+
+        // Lógica do Carrinho
+        let carrinho = [];
+        let subtotal = 0;
+        let valorFrete = 0;
+        let totalFinal = 0;
+
+        function adicionarItem(nome, preco) {
+            carrinho.push({ nome, preco });
+            subtotal += preco;
+            document.getElementById('cart-bar').style.display = 'flex';
+            document.getElementById('qtd-itens').innerText = carrinho.length;
+            document.getElementById('valor-subtotal').innerText = subtotal.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            alert(`${nome} adicionado!`);
+        }
+
+        // Abrir Checkout
+        function abrirCheckout() {
+            if(carrinho.length === 0) return;
+            document.getElementById('checkout-modal').style.display = 'flex';
+            document.getElementById('resumo-sub').innerText = subtotal.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            atualizarTotal();
+        }
+
+        function fecharCheckout() {
+            document.getElementById('checkout-modal').style.display = 'none';
+        }
+
+        // Cálculo Simulado de Frete (R$ 35,00 padrão para qualquer CEP)
+        function calcularFrete() {
+            const cep = document.getElementById('cep').value;
+            if(cep.length >= 8) {
+                valorFrete = 35.00; // Simulação fixa
+                document.getElementById('resumo-frete').innerText = 'R$ 35,00 (Sedex)';
+                atualizarTotal();
+            }
+        }
+
+        function atualizarTotal() {
+            totalFinal = subtotal + valorFrete;
+            document.getElementById('resumo-total').innerText = totalFinal.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
+            gerarParcelas();
+        }
+
+        // Exibir opções do Cartão
+        function verificarPagamento() {
+            const metodo = document.getElementById('metodoPagamento').value;
+            if(metodo === 'Cartão de Crédito') {
+                document.getElementById('dados-cartao').style.display = 'block';
+                gerarParcelas();
+            } else {
+                document.getElementById('dados-cartao').style.display = 'none';
+            }
+        }
+
+        // Gerar parcelas dinâmicas baseadas no total
+        function gerarParcelas() {
+            const select = document.getElementById('parcelas');
+            select.innerHTML = '';
+            for(let i = 1; i <= 12; i++) {
+                let valorParcela = totalFinal / i;
+                select.innerHTML += `<option value="${i}x de R$ ${valorParcela.toFixed(2)}">${i}x de R$ ${valorParcela.toFixed(2)} sem juros</option>`;
+            }
+        }
+
+        // Preparar os dados ocultos para enviar pro Email do Enzzo
+        function prepararEnvio() {
+            // Formata a lista de itens para ficar bonita no e-mail
+            let listaProdutos = "";
+            carrinho.forEach(item => { listaProdutos += `- ${item.nome} (R$ ${item.preco})\n`; });
+            
+            document.getElementById('mail_itens').value = listaProdutos;
+            document.getElementById('mail_total').value = document.getElementById('resumo-total').innerText;
+            
+            // Obs: O form será submetido nativamente para o FormSubmit após essa função rodar.
+        }
+    </script>
+</body>
+</html>
